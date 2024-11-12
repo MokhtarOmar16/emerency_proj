@@ -127,6 +127,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ),
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
 }
 
 
@@ -157,6 +158,8 @@ DJOSER = {
     'USERNAME_FIELD': 'phone_no',
     'TOKEN_MODEL': None, 
     'SERIALIZERS': {
+        'user_create': 'users.apis.serializers.UserCreateSerializer',
+        'current_user': 'users.apis.serializers.UserSerializer',
     },
 }
 

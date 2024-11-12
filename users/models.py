@@ -19,12 +19,10 @@ class User(AbstractUser):
         },
     )
     email = models.EmailField(_('email'), unique=True, blank=True, null=True)
-    is_active = models.BooleanField(default=True)
-    is_staff = models.BooleanField(default=False)
 
     USERNAME_FIELD = 'phone_no'
     REQUIRED_FIELDS = []
-
+    
     objects = CustomUserManager()
 
     def __str__(self):
