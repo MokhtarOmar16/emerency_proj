@@ -153,6 +153,8 @@ SPECTACULAR_SETTINGS = {
 
 
 DJOSER = {
+    'USER_ID_FIELD': 'phone_no', 
+    'USERNAME_FIELD': 'phone_no',
     'TOKEN_MODEL': None, 
     'SERIALIZERS': {
     },
