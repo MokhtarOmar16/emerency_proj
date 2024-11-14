@@ -35,7 +35,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     'djoser',
-    
+    "debug_toolbar",
+        
     'users',
     'emergency'
 ]
@@ -170,3 +171,10 @@ CORS_ALLOW_CREDENTIALS = True
 SPECTACULAR_SETTINGS = {
     'PREPROCESSING_HOOKS': ['users.hooks.custom_preprocessing_hook'],
 }
+
+
+INTERNAL_IPS = [
+    # ...
+    "127.0.0.1",
+    # ...
+]
