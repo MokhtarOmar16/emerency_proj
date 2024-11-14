@@ -167,3 +167,6 @@ DJOSER = {
 
 CORS_ALLOWED_ALL_ORIGINS = True
 CORS_ALLOW_CREDENTIALS = True
+SPECTACULAR_SETTINGS = {
+    'PREPROCESSING_HOOKS': ['users.hooks.custom_preprocessing_hook'],
+}
