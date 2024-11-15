@@ -154,11 +154,36 @@ SPECTACULAR_SETTINGS = {
 
 
 
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'  
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+EMAIL_HOST_USER = os.getenv('GMAIL_USER')
+EMAIL_HOST_PASSWORD = os.getenv('GMAIL_APP_PASSWORD')
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+
+
 
 DJOSER = {
+    "PASSWORD_CHANGED_EMAIL_CONFIRMATION": True,
+    'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}', 
+    'SEND_CONFIRMATION_EMAIL': True,  
+    
+    # 'SEND_ACTIVATION_EMAIL': True,  
+    # 'ACTIVATION_URL': '/activate/{uid}/{token}',
+    'PASSWORD_RESET_SHOW_EMAIL_NOT_FOUND': True,  
+    
+    
     'USER_ID_FIELD': 'phone_no', 
     'USERNAME_FIELD': 'phone_no',
+    
+    
     'TOKEN_MODEL': None, 
+    
+    
     'SERIALIZERS': {
         'user_create': 'users.apis.serializers.UserCreateSerializer',
         'current_user': 'users.apis.serializers.UserSerializer',
