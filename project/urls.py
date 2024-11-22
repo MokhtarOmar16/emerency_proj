@@ -23,11 +23,12 @@ from drf_spectacular.views import (
 )
 from django.conf import settings
 from debug_toolbar.toolbar import debug_toolbar_urls
+from djoser.urls.jwt import urlpatterns as jwt_urls
 
 BASE_URL = "api/v1"
 
 urlpatterns = [
-    # path('admin/', admin.site.urls), # admin endpoint 
+    path('admin/', admin.site.urls), # admin endpoint 
     
     # user endpoints 
     path('auth/', include('djoser.urls.jwt')), # Djoser endpoints 
@@ -38,6 +39,4 @@ urlpatterns = [
     path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 
 
-] 
-if settings.DEBUG :
-    debug_toolbar_urls()
+] +  debug_toolbar_urls()
