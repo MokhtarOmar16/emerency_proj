@@ -14,26 +14,30 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-# from django.contrib import admin
+from django.contrib import admin
 from django.urls import path, include
-from django.conf.urls.static import static
+from drf_spectacular.views import (
+    SpectacularAPIView,
+    SpectacularRedocView,
+    SpectacularSwaggerView,
+)
 from django.conf import settings
-from drf_spectacular.views import SpectacularAPIView, SpectacularRedocView, SpectacularSwaggerView
 from debug_toolbar.toolbar import debug_toolbar_urls
 
+BASE_URL = "api/v1"
+
 urlpatterns = [
-    path('schema/', SpectacularAPIView.as_view(), name='schema'),
-    path('docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    # path('redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
+    # path('admin/', admin.site.urls), # admin endpoint 
     
-    path(r'', include('djoser.urls')),
-    path(r'auth/', include('djoser.urls.jwt')),
-    # path('admin/', admin.site.urls),
-]
+    # user endpoints 
+    path('auth/', include('djoser.urls.jwt')), # Djoser endpoints 
+    path('auth/', include('users.urls')),  
+    
+    path('api/schema/', SpectacularAPIView.as_view(), name='schema'), # swagger docs endpoint    
+    path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 
-urlpatterns += static(settings.MEDIA_URL,
-                        document_root=settings.MEDIA_ROOT)
 
-if settings.DEBUG: 
-    from debug_toolbar.toolbar import debug_toolbar_urls
-    urlpatterns += debug_toolbar_urls() 
+] 
+if settings.DEBUG :
+    debug_toolbar_urls()

@@ -21,7 +21,7 @@ class Emergency(models.Model):
         default=EmergencyType.OFFER_HELP,
     )
     description = models.TextField()
-    created_at = models.DateTimeField(auto_now=1)
+    created_at = models.DateTimeField(auto_now_add=1)
     lat = models.FloatField()
     lgt = models.FloatField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
