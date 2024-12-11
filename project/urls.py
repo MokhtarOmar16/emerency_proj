@@ -18,25 +18,18 @@ from django.contrib import admin
 from django.urls import path, include
 from drf_spectacular.views import (
     SpectacularAPIView,
-    SpectacularRedocView,
     SpectacularSwaggerView,
 )
-from django.conf import settings
 from debug_toolbar.toolbar import debug_toolbar_urls
-from djoser.urls.jwt import urlpatterns as jwt_urls
-
-BASE_URL = "api/v1"
 
 urlpatterns = [
     path('admin/', admin.site.urls), # admin endpoint 
     
     # user endpoints 
+    path('', include('users.urls')),  
     path('auth/', include('djoser.urls.jwt')), # Djoser endpoints 
-    path('auth/', include('users.urls')),  
     
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'), # swagger docs endpoint    
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
-    path('api/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
-
 
 ] +  debug_toolbar_urls()

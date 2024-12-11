@@ -1,9 +1,15 @@
+import random
+from django.core.mail import send_mail
+from django.core.cache import cache
 from rest_framework.generics import CreateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
-from .serializers import UserSerializer, MeSerializer, ChangePasswordSerializer
+from rest_framework.views import APIView
+from djoser.social import views as social
+from .serializers import UserSerializer, MeSerializer, ChangePasswordSerializer , PasswordResetCodeSerializer,PasswordResetRequestSerializer
 from .base_viewsets import RetrieveUpdateDestroyViewSet
+from ..schema import *
 
 
 
@@ -33,3 +39,26 @@ class ChangePasswordView(CreateAPIView):
     def create(self, request, *args, **kwargs):
         super().create(request, *args, **kwargs)
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+
+
+class CustomProviderAuthView(social.ProviderAuthView):
+    @custom_provider_auth_view_get_schema
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    @custom_provider_auth_view_post_schema
+    def post(self, request, *args, **kwargs):
+        return super().post(request, *args, **kwargs)
+
+
+
+@sent_email_schema
+class RequestPasswordResetCodeView(CreateAPIView):
+    serializer_class = PasswordResetRequestSerializer
+
+
+@confirm_reset
+class PasswordResetCodeView(CreateAPIView):
+    serializer_class = PasswordResetCodeSerializer
