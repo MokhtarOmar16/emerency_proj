@@ -13,6 +13,7 @@ django-debug-toolbar = "*"
 django-cors-headers = "*"
 djangorestframework-simplejwt = "*"
 drf-spectacular = "*"
+gunicorn = "*"
 
 [dev-packages]
 
