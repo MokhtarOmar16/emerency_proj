@@ -208,3 +208,5 @@ CACHES = {
         'LOCATION': 'unique-snowflake',
     }
 }
+SESSION_COOKIE_SECURE = True
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = True

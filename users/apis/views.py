@@ -32,7 +32,8 @@ class UserMeViewSet(RetrieveUpdateDestroyViewSet):
 
 class ChangePasswordView(CreateAPIView):
     serializer_class = ChangePasswordSerializer
-    
+    permission_classes = [ IsAuthenticated ]
+
     def get_serializer_context(self):
         return {"request": self.request}
     
