@@ -197,10 +197,16 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get("GOOGLE_SECRET")
 SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
     "https://www.googleapis.com/auth/userinfo.email",
     "https://www.googleapis.com/auth/userinfo.profile",
-    "openid",
 ]
 SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ["first_name", "last_name"]
 
+SOCIAL_AUTH_PROTECTED_USER_FIELDS = [
+    'first_name', 
+    'last_name', 
+    'username', 
+    'password',
+    'username'
+]
 
 CACHES = {
     'default': {
@@ -208,5 +214,3 @@ CACHES = {
         'LOCATION': 'unique-snowflake',
     }
 }
-SESSION_COOKIE_SECURE = True
-SOCIAL_AUTH_REDIRECT_IS_HTTPS = True
