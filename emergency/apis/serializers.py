@@ -23,7 +23,7 @@ class MinimalEmergencySerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Emergency
-        fields = ['id', 'emergency_type', 'description', 'image']
+        fields = ['id', 'emergency_type', 'description', 'image'] # name , location. time 
 
     def get_image(self, obj):
         """
