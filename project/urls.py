@@ -28,8 +28,10 @@ urlpatterns = [
     # user endpoints 
     path('', include('users.urls')),  
     path('auth/', include('djoser.urls.jwt')), # Djoser endpoints 
+    path('emergency/', include('emergency.urls')), # Djoser endpoints 
     
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'), # swagger docs endpoint    
     path('api/docs/', SpectacularSwaggerView.as_view(url_name='schema'), name='swagger-ui'),
+    
 
 ] +  debug_toolbar_urls()

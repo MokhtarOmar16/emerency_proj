@@ -37,7 +37,7 @@ INSTALLED_APPS = [
     "debug_toolbar",
     "social_django",
     'djoser',
-    
+    'emergency',
     'users'
 ]
 
