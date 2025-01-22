@@ -23,6 +23,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    "daphne",
+    'chat',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -32,13 +34,16 @@ INSTALLED_APPS = [
     'django_filters',
     'whitenoise.runserver_nostatic',
     'drf_spectacular',
+    'drf_spectacular_websocket',
+    'drf_spectacular_sidecar',
     'corsheaders',
     'rest_framework',
     "debug_toolbar",
     "social_django",
     'djoser',
     'emergency',
-    'users'
+    'users',
+    'channels',
 ]
 
 MIDDLEWARE = [
@@ -76,7 +81,6 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'project.wsgi.application'
 
 
 
@@ -161,16 +165,21 @@ SIMPLE_JWT = {
         "REFRESH_TOKEN_LIFETIME": timedelta(days=7),
 }
 
-
-# docs title
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'Your API',
-    'DESCRIPTION': 'API documentation for user endpoints',
+    'DEFAULT_GENERATOR_CLASS': 'drf_spectacular_websocket.schemas.WsSchemaGenerator',
+    'SWAGGER_UI_DIST': 'SIDECAR',
+    'SWAGGER_UI_FAVICON_HREF': 'SIDECAR',
+    'REDOC_DIST': 'SIDECAR',
+    'SWAGGER_UI_SETTINGS': {
+        'connectSocket': True,  # Automatically establish a WS connection when opening swagger
+        'socketMaxMessages': 8,  # Max number of messages displayed in the log window in swagger
+        'socketMessagesInitialOpened': False,  # Automatically open the log window when opening swagger
+    },
+    'TITLE': 'Emergency API',
+    'DESCRIPTION': 'Emergency API is a REST API for emergency services.',
     'VERSION': '1.0.0',
     'SERVE_INCLUDE_SCHEMA': 0,
-
 }
-
 
 
 
@@ -213,4 +222,14 @@ CACHES = {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         'LOCATION': 'unique-snowflake',
     }
+}
+
+
+
+# WSGI_APPLICATION = 'project.wsgi.application'
+ASGI_APPLICATION = 'project.asgi.application'
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels.layers.InMemoryChannelLayer',
+    },
 }

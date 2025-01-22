@@ -38,3 +38,5 @@ urllib3==2.2.3
 whitenoise==6.8.2
 psycopg2-binary==2.9.9
 pillow
+channels==4.2.0
+channels_redis==4.2.1
