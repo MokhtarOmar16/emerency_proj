@@ -9,21 +9,21 @@ from ..schema import emergency_create_schema
 
 class EmergencyListView(generics.ListAPIView):
     """
-    GET /emergencies/
+    GET /emergency/
     Returns a minimal list of Emergency objects:
       - id
       - emergency_type
       - description
       - first image (if any)
     """
-    queryset = Emergency.objects.all()
+    queryset = Emergency.objects.all().order_by('-created_at')
     serializer_class = MinimalEmergencySerializer
-    permission_classes = [permissions.IsAuthenticated]  # Lock it down if needed
+    permission_classes = [permissions.IsAuthenticated]  
 
 
 class EmergencyDetailView(generics.RetrieveAPIView):
     """
-    GET /emergencies/<pk>/
+    GET /emergency/<pk>/
     Returns a detailed view of a single Emergency:
       - all images
       - user_first_name, user_last_name
@@ -37,7 +37,7 @@ class EmergencyDetailView(generics.RetrieveAPIView):
 @emergency_create_schema
 class EmergencyCreateView(generics.CreateAPIView):
     """
-    POST /emergencies/create/
+    POST /emergency/create/
     Create a new Emergency record (with up to 5 images).
     The 'user' is automatically set to the requesting user.
     """
@@ -46,5 +46,4 @@ class EmergencyCreateView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
-        # Attach the current authenticated user
         serializer.save(user=self.request.user)

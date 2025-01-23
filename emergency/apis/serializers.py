@@ -29,6 +29,7 @@ class MinimalEmergencySerializer(serializers.ModelSerializer):
             'created_at',
             'lat',
             'lgt',
+            'image'
             ] 
 
     def get_image(self, obj):

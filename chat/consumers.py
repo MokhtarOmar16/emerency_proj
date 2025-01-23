@@ -2,8 +2,10 @@ import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.utils.timezone import now  
 from drf_spectacular_websocket.decorators import extend_ws_schema
-from .models import Chat
+from .models import Chat, Message
 from channels.db import database_sync_to_async
+from asgiref.sync import sync_to_async
+
 class BaseSupportChatConsumer(AsyncWebsocketConsumer):
     ROOM_GROUP_NAME = None
 
@@ -25,20 +27,37 @@ class BaseSupportChatConsumer(AsyncWebsocketConsumer):
             )
 
     async def receive(self, text_data):
-        text_data_json = json.loads(text_data)
-        message = text_data_json['message']
-        await self.channel_layer.group_send(
-            self.ROOM_GROUP_NAME,
-            {
-                'type': 'chat_message',
-                'message': message,
-                'user': self.user
-            }
-        )
-
+            text_data_json = json.loads(text_data)
+            message = text_data_json['message']
+            
+            if not message.strip():
+                await self.send(json.dumps({
+                'error': 'Empty messages are not allowed.'
+            }))
+                return
+            
+            chat = await sync_to_async(Chat.objects.get)(room=self.ROOM_GROUP_NAME)
+                
+            await sync_to_async(Message.objects.create)(
+                    sender=self.user,
+                    chat=chat,
+                    body=message
+                )
+            
+            
+            await self.channel_layer.group_send(
+                    self.ROOM_GROUP_NAME,
+                    {
+                        'type': 'chat_message',
+                        'message': message,
+                        'user': self.user
+                    }
+                )
+            
     async def chat_message(self, event):
         message = event['message']
         user = event['user']
+        
         await self.send(text_data=json.dumps({
             'message': message,
             'user': user.id,
@@ -54,7 +73,6 @@ class BaseSupportChatConsumer(AsyncWebsocketConsumer):
         return self.user.is_authenticated
 
     async def group_setup(self):
-        print(self.ROOM_GROUP_NAME)
         await self.channel_layer.group_add(
             self.ROOM_GROUP_NAME,
             self.channel_name
@@ -66,8 +84,7 @@ class ClientSupportChatConsumer(BaseSupportChatConsumer):
     @database_sync_to_async
     def set_room_group_name(self):
         self.ROOM_GROUP_NAME = f"chat_{self.user.id}"
-        print(self.ROOM_GROUP_NAME)
-        print(self.user.id)
+
         Chat.objects.get_or_create(room=self.ROOM_GROUP_NAME)
 
     def is_valid_user(self):

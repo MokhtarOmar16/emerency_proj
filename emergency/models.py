@@ -25,7 +25,8 @@ class Emergency(models.Model):
     lat = models.FloatField()
     lgt = models.FloatField()
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-
+    class Meta:
+        ordering = ['-created_at']
 
 
 class EmergencyImage(models.Model):

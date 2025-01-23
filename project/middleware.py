@@ -24,13 +24,12 @@ def get_user(validated_token):
 class JwtAuthMiddleware(BaseMiddleware):
     def __init__(self, inner):
         self.inner = inner
-        print("middleware")
 
     async def __call__(self, scope, receive, send):
         close_old_connections()
         
         token = parse_qs(scope["query_string"].decode("utf8"))["token"][0]
-        print(token)
+
         try:
             UntypedToken(token)
         except Exception as e:
