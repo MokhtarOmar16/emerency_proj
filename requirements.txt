@@ -40,3 +40,6 @@ psycopg2-binary==2.9.9
 pillow
 channels==4.2.0
 channels_redis==4.2.1
+daphne==4.1.2
+drf-spectacular-sidecar==2024.4.1
+drf_spectacular_websocket==1.3.1
