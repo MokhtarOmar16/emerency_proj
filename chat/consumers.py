@@ -1,10 +1,10 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
 from django.utils.timezone import now  
-from drf_spectacular_websocket.decorators import extend_ws_schema
 from .models import Chat, Message
 from channels.db import database_sync_to_async
 from asgiref.sync import sync_to_async
+from .schema import Custom_admin_consumer
 
 class BaseSupportChatConsumer(AsyncWebsocketConsumer):
     ROOM_GROUP_NAME = None
@@ -53,7 +53,7 @@ class BaseSupportChatConsumer(AsyncWebsocketConsumer):
                         'user': self.user
                     }
                 )
-            
+    @Custom_admin_consumer
     async def chat_message(self, event):
         message = event['message']
         user = event['user']
@@ -89,6 +89,7 @@ class ClientSupportChatConsumer(BaseSupportChatConsumer):
 
     def is_valid_user(self):
         return super().is_valid_user()  and not self.user.is_superuser
+
 
 class AdminSupportChatConsumer(BaseSupportChatConsumer):
     @database_sync_to_async

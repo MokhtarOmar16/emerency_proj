@@ -9,3 +9,7 @@ class User(AbstractUser):
     USERNAME_FIELD = 'email'
     username = None
     REQUIRED_FIELDS = []
+    
+    @property
+    def is_admin(self):
+        return self.is_staff or self.is_superuser

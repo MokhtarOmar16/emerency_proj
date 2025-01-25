@@ -5,7 +5,13 @@ class ChatSerializer(serializers.ModelSerializer):
         model = Chat
         fields = '__all__'
         
+        
 class MessageSerializer(serializers.ModelSerializer):
+    chat_room = serializers.SerializerMethodField()
+
     class Meta:
         model = Message
-        fields = '__all__'
+        fields = ['body', 'sender', 'chat_room', 'created_at']
+
+    def get_chat_room(self, obj):
+        return obj.chat.room

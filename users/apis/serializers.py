@@ -34,8 +34,8 @@ class UserSerializer(serializers.ModelSerializer):
 
 
     def create(self, validated_data):
-        user = User.objects.create_user(**validated_data)
-        return user
+        return User.objects.create_user(**validated_data)
+        
     
     def to_representation(self, instance):
         refresh = RefreshToken.for_user(instance)
@@ -52,9 +52,10 @@ class UserSerializer(serializers.ModelSerializer):
 
 class MeSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(read_only=1)
+    is_admin = serializers.BooleanField(read_only=1)
     class Meta:
         model = User
-        fields = ['id','email','first_name','last_name',]
+        fields = ['id','email','first_name','last_name','is_admin']
 
 
 class ChangePasswordSerializer(serializers.Serializer):
