@@ -22,8 +22,7 @@ class Emergency(models.Model):
     )
     description = models.TextField()
     created_at = models.DateTimeField(auto_now_add=1)
-    lat = models.FloatField()
-    lgt = models.FloatField()
+    location = models.CharField(max_length=300)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     class Meta:
         ordering = ['-created_at']

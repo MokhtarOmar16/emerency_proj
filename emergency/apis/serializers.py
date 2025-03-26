@@ -27,8 +27,7 @@ class MinimalEmergencySerializer(serializers.ModelSerializer):
             'id',
             'emergency_type',
             'created_at',
-            'lat',
-            'lgt',
+            'location',
             'image'
             ] 
 
@@ -44,7 +43,7 @@ class EmergencyDetailSerializer(serializers.ModelSerializer):
     Returns the full details of an Emergency:
     - All images
     - user first/last name
-    - lat, lgt, etc.
+    - location , etc.
     """
     images = EmergencyImageSerializer(many=True, read_only=True)
     user_first_name = serializers.ReadOnlyField(source='user.first_name')
@@ -57,8 +56,7 @@ class EmergencyDetailSerializer(serializers.ModelSerializer):
             'emergency_type',
             'description',
             'created_at',
-            'lat',
-            'lgt',
+            'location',
             'user_first_name',
             'user_last_name',
             'images',
@@ -70,8 +68,7 @@ class CreateEmergencySerializer(serializers.ModelSerializer):
     For POST endpoint. Expects:
     - emergency_type
     - description
-    - lat
-    - lgt
+    - location
     - images (list of file uploads, optional)
     (User is set automatically in the view, not posted by the client)
     """
@@ -86,8 +83,7 @@ class CreateEmergencySerializer(serializers.ModelSerializer):
         fields = [
             'emergency_type',
             'description',
-            'lat',
-            'lgt',
+            'location',
             'images',
         ]
 

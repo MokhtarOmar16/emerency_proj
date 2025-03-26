@@ -56,16 +56,14 @@ class TestEmergencyCreate:
         
     def test_if_data_valid_returns_201(self, api_client, authenticate):
         authenticate()
-        response = api_client.post('/emergency/create/', {'emergency_type': 'O', 'description': 'test_description', 'lat': 23.659, 'lgt': 12.5})
+        response = api_client.post('/emergency/create/', {'emergency_type': 'O', 'description': 'test_description', 'location': 'test_location'})
         assert response.status_code == status.HTTP_201_CREATED
         assert response.data['emergency_type'] == 'O'
         assert response.data['description'] == 'test_description'
-        assert response.data['lat'] == 23.659
-        assert response.data['lgt'] == 12.5
-        
+
     def test_if_images_bigger_than_5_returns_400(self, api_client, authenticate):
         authenticate()
-        response = api_client.post('/emergency/create/', {'emergency_type': 'O', 'description': 'test_description', 'lat': 23.659, 'lgt': 12.5, 'images':[
+        response = api_client.post('/emergency/create/', {'emergency_type': 'O', 'description': 'test_description', 'location': 'test_location', 'images':[
             'image1.jpg', 'image2.jpg', 'image3.jpg', 'image4.jpg', 'image5.jpg', 'image6.jpg'
         ]})
         assert response.status_code == status.HTTP_400_BAD_REQUEST
