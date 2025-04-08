@@ -12,8 +12,8 @@ emergency_create_schema = extend_schema(
                 help_text="Type of emergency. Options: D = Danger Alert, O = Offer Help, M = Medical Help."
             ),
             "description": serializers.CharField(help_text="Details about the emergency."),
-            "lat": serializers.FloatField(help_text="Latitude coordinate."),
-            "lgt": serializers.FloatField(help_text="Longitude coordinate."),
+            'location': serializers.CharField(),
+
             "images": serializers.ListField(
                 child=serializers.FileField(),
                 required=False,
@@ -29,8 +29,7 @@ emergency_create_schema = extend_schema(
                 "emergency_type": serializers.CharField(),
                 "description": serializers.CharField(),
                 "created_at": serializers.DateTimeField(),
-                "lat": serializers.FloatField(),
-                "lgt": serializers.FloatField(),
+                'location': serializers.CharField(),
                 "images": serializers.ListField(
                     child=inline_serializer(
                         name="CreatedEmergencyImageItem",
