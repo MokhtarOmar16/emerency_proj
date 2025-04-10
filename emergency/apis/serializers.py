@@ -20,7 +20,8 @@ class MinimalEmergencySerializer(serializers.ModelSerializer):
     - image (the first image, if any)
     """
     image = serializers.SerializerMethodField()
-
+    user_first_name = serializers.ReadOnlyField(source='user.first_name')
+    user_last_name = serializers.ReadOnlyField(source='user.last_name')
     class Meta:
         model = Emergency
         fields = [
@@ -28,7 +29,9 @@ class MinimalEmergencySerializer(serializers.ModelSerializer):
             'emergency_type',
             'created_at',
             'location',
-            'image'
+            'image',
+            'user_first_name',
+            'user_last_name',
             ] 
 
     def get_image(self, obj):

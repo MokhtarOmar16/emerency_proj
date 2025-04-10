@@ -6,6 +6,8 @@ from .serializers import (
     CreateEmergencySerializer,
 )
 from ..schema import emergency_create_schema
+from django_filters.rest_framework import DjangoFilterBackend
+
 
 class EmergencyListView(generics.ListAPIView):
     """
@@ -16,9 +18,11 @@ class EmergencyListView(generics.ListAPIView):
       - description
       - first image (if any)
     """
-    queryset = Emergency.objects.all().order_by('-created_at')
+    queryset = Emergency.objects.all().order_by('-created_at').select_related('user')
     serializer_class = MinimalEmergencySerializer
     permission_classes = [permissions.IsAuthenticated]  
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ['emergency_type']
 
 
 class EmergencyDetailView(generics.RetrieveAPIView):
@@ -29,7 +33,7 @@ class EmergencyDetailView(generics.RetrieveAPIView):
       - user_first_name, user_last_name
       - lat, lgt, etc.
     """
-    queryset = Emergency.objects.all()
+    queryset = Emergency.objects.all().select_related('user')
     serializer_class = EmergencyDetailSerializer
     permission_classes = [permissions.IsAuthenticated]  # Lock it down if needed
 
