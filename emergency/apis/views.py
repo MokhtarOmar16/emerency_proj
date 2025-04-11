@@ -20,7 +20,7 @@ class EmergencyListView(generics.ListAPIView):
     """
     queryset = Emergency.objects.all().order_by('-created_at').select_related('user')
     serializer_class = MinimalEmergencySerializer
-    permission_classes = [permissions.IsAuthenticated]  
+    # permission_classes = [permissions.IsAuthenticated]  
     filter_backends = [DjangoFilterBackend]
     filterset_fields = ['emergency_type']
 
@@ -35,7 +35,7 @@ class EmergencyDetailView(generics.RetrieveAPIView):
     """
     queryset = Emergency.objects.all().select_related('user')
     serializer_class = EmergencyDetailSerializer
-    permission_classes = [permissions.IsAuthenticated]  # Lock it down if needed
+    # permission_classes = [permissions.IsAuthenticated]  # Lock it down if needed
 
 
 @emergency_create_schema
