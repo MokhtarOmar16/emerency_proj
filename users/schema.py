@@ -77,6 +77,14 @@ custom_provider_auth_view_post_schema = extend_schema(
 
 sent_email_schema= extend_schema(
     description= "The code that sent, it'll expire after 1 hour.",
+    parameters=[
+        OpenApiParameter(
+            name="redirect_url",
+            description="The URL to redirect to after sending the email. \n format should be like `http://example.com/callback` and it will send the link like `http://example.com/callback?code=123456`",
+            type=str,
+            required=True,
+        ),
+    ],
     responses={
             201: inline_serializer(
                 name="good request",

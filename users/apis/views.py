@@ -57,7 +57,12 @@ class CustomProviderAuthView(social.ProviderAuthView):
 
 @sent_email_schema
 class RequestPasswordResetCodeView(CreateAPIView):
-    serializer_class = PasswordResetRequestSerializer
+    serializer_class = PasswordResetRequestSerializer   
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        redirect_url = self.request.query_params.get('redirect_url')
+        context['redirect_url'] = redirect_url
+        return context
 
 
 @confirm_reset

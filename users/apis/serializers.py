@@ -125,17 +125,19 @@ class PasswordResetRequestSerializer(basePasswordResetSerializer):
     def save(self):
         email = self.validated_data['email']
         code = cache.get(email)
+        redirect_url = self.context.get('redirect_url')
+
         if not code:
             code = f"{random.randint(100000, 999999)}"
             cache.set(email, code, timeout=3600)
             
         send_mail(
             subject="Password Reset Code",
-            message=f"Your password reset code is:  {code}. \nIf you did not make this request then please ignore this email.",
+            message=f"You can reset your password throught this link:\n {redirect_url}?code={code} \nIf you did not make this request then please ignore this email.",
             from_email=None,  # Uses DEFAULT_FROM_EMAIL in settings.py
             recipient_list=[email],
         )
-        
+
     def to_representation(self, instance):
         return {"message":"code sent successfully."}
     
@@ -148,7 +150,7 @@ class PasswordResetCodeSerializer(basePasswordResetSerializer):
         try:
             validate_password(value)
         except Exception as e:
-            raise serializers.ValidationError(e)
+            raise serializers.ValidationError(e) from e
         return value
     
     def validate_email(self, value):
