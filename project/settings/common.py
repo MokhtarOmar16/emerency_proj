@@ -189,7 +189,10 @@ DJOSER = {
     'TOKEN_MODEL': None, 
     'SERIALIZERS': {
     },
-    "SOCIAL_AUTH_ALLOWED_REDIRECT_URIS": ["http://localhost:3000"],
+    "SOCIAL_AUTH_ALLOWED_REDIRECT_URIS": ["http://localhost:3000",
+                                        "http://localhost:3000/auth/googlecallback",
+                                        "http://localhost:3000/auth",
+                                        "http://localhost:3000/auth/callback"],
 }
 
 CORS_ALLOWED_ALL_ORIGINS = True
