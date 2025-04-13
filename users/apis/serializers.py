@@ -133,7 +133,7 @@ class PasswordResetRequestSerializer(basePasswordResetSerializer):
             
         send_mail(
             subject="Password Reset Code",
-            message=f"You can reset your password throught this link:\n {redirect_url}?code={code} \nIf you did not make this request then please ignore this email.",
+            message=f"You can reset your password throught this link:\n {redirect_url}?code={code}&email={email} \nIf you did not make this request then please ignore this email.",
             from_email=None,  # Uses DEFAULT_FROM_EMAIL in settings.py
             recipient_list=[email],
         )
