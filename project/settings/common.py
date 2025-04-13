@@ -39,8 +39,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework',
     "debug_toolbar",
-    "social_django",
-    'djoser',
     'emergency',
     'users',
     'channels',
@@ -57,10 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    
-    # Social
-    
-    "social_django.middleware.SocialAuthExceptionMiddleware",
+
 ]
 
 ROOT_URLCONF = 'project.urls'
@@ -214,22 +209,32 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD")
 # Social
-SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get("GOOGLE_CLIENT_ID")
-SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get("GOOGLE_SECRET")
-SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
-    "https://www.googleapis.com/auth/userinfo.email",
-    "https://www.googleapis.com/auth/userinfo.profile",
-]
-SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ["first_name", "last_name"]
 
-SOCIAL_AUTH_PROTECTED_USER_FIELDS = [
-    'first_name', 
-    'last_name', 
-    'username', 
-    'password',
-    'username'
-]
+def custom_save_data(*args, **kwargs) : 
+    from users.models import User
+    user = kwargs['user'] 
+    print(user)
+    u, created = User.objects.get_or_create(
+        email=user['email'],
+    )
+    if created:
+        u.first_name = user.get('given_name', '')
+        u.last_name = user.get('family_name', '')
+        u.set_unusable_password()
+    u.save()
+    return u
+SOCIAL_AUTH = {
+    
+    'google' : {
+        'client_id' : os.environ.get("GOOGLE_CLIENT_ID"),
+        'client_secret' : os.environ.get("GOOGLE_SECRET"),
+        'redirect_url' : 'http://localhost:3000/auth/googlecallback',
+        'save_user_data' : custom_save_data
+    },
+}
 
+
+#cache
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',

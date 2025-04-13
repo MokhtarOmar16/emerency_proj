@@ -5,6 +5,8 @@ from django.contrib.auth.password_validation import validate_password
 from django.core.cache import cache
 from django.core.mail import send_mail
 import random
+from .platforms import GoogleAuth, generate_tokens_for_user
+
 
 
 User = get_user_model()
@@ -71,8 +73,7 @@ class ChangePasswordSerializer(serializers.Serializer):
 
     def validate_current_password(self, value):
         self.request = self.context["request"]
-        is_password_valid = self.request.user.check_password(value)
-        if is_password_valid:
+        if is_password_valid := self.request.user.check_password(value):
             return value
         else:
             self.fail("invalid_password")
@@ -175,3 +176,18 @@ class PasswordResetCodeSerializer(basePasswordResetSerializer):
 
     def to_representation(self, instance):
         return {"message": "password change successfully."}
+    
+    
+
+
+class GoogleCodeSerializer (serializers.Serializer) : 
+    code = serializers.CharField()
+    __google_auth = GoogleAuth()
+    
+    def create(self, validated_data):
+        code = validated_data.get('code')
+        user = self.__google_auth.get_user_info_by_code(code)
+        return self.__google_auth.save_user_data(user_dict=user)
+    
+    def to_representation(self, instance):
+        return generate_tokens_for_user(instance)
