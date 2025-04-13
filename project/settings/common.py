@@ -228,7 +228,7 @@ SOCIAL_AUTH = {
     'google' : {
         'client_id' : os.environ.get("GOOGLE_CLIENT_ID"),
         'client_secret' : os.environ.get("GOOGLE_SECRET"),
-        'redirect_url' : 'http://localhost:3000/auth/googlecallback',
+        'redirect_url' : 'http://localhost:3000/googlecallback',
         'save_user_data' : custom_save_data
     },
 }
