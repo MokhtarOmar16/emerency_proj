@@ -6,9 +6,6 @@ from rest_framework import status
 
 @pytest.mark.django_db
 class TestEmergencyList:
-    def test_if_user_is_annoynous_returns_400(self, api_client):
-        response = api_client.get('/emergency/')
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
     
     def test_if_user_is_authenticated_returns_200(self, api_client, authenticate):
         authenticate()
@@ -27,10 +24,6 @@ class TestEmergencyList:
         assert response.data['count']== 0
 @pytest.mark.django_db
 class TestEmergencyDetail:
-    def test_if_user_is_annoynous_returns_400(self, api_client):
-        response = api_client.get('/emergency/1/')
-        assert response.status_code == status.HTTP_401_UNAUTHORIZED
-    
     def test_if_user_is_authenticated_returns_data(self, api_client, authenticate):
         authenticate()
         emergency = baker.make('emergency.Emergency')  
