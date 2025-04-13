@@ -11,7 +11,7 @@ class MessageSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Message
-        fields = ['body', 'sender', 'chat_room', 'created_at']
+        fields = ['id','body', 'sender', 'chat_room', 'created_at']
 
     def get_chat_room(self, obj):
         return obj.chat.room
