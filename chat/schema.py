@@ -46,3 +46,4 @@ custom_chat_messages_list_schema = extend_schema(
     description="This Endpoint is protected , <br> You should be A `user`",
     responses=MessageSerializer
 )
+

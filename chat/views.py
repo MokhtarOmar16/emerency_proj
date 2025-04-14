@@ -18,5 +18,13 @@ class ChatMessagesDetailView(ListAPIView):
     permission_classes = [IsAuthenticatedAndNotAdmin]
     def get_queryset(self):
         return super().get_queryset().filter(chat__room=f'chat_{self.request.user.id}')
-    
+
+
+@custom_chat_list_schema
+class ChatAdminMessagesDetailView(ListAPIView):
+    queryset = Message.objects.all().select_related('chat')
+    serializer_class = MessageSerializer
+    permission_classes = [IsAdminUser]
+    def get_queryset(self):
+        return super().get_queryset().filter(chat__id=self.kwargs['pk'])
     

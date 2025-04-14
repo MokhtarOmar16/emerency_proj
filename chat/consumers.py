@@ -27,8 +27,14 @@ class BaseSupportChatConsumer(AsyncWebsocketConsumer):
             )
 
     async def receive(self, text_data):
-            text_data_json = json.loads(text_data)
-            message = text_data_json['message']
+            try:
+                text_data_json = json.loads(text_data)
+                message = text_data_json['message']
+            except json.JSONDecodeError:
+                await self.send(json.dumps({
+                    'error': 'Invalid JSON format.'
+                }))
+                return
             
             if not message.strip():
                 await self.send(json.dumps({
@@ -57,14 +63,13 @@ class BaseSupportChatConsumer(AsyncWebsocketConsumer):
     async def chat_message(self, event):
         message = event['message']
         user = event['user']
-        
         await self.send(text_data=json.dumps({
-            'message': message,
-            'user': user.id,
-            'name': user.first_name,
-            'is_admin': user.is_superuser,
-            'time': now().isoformat(),
-        }))
+                'message': message,
+                'user': user.id,
+                'name': user.first_name,
+                'is_admin': user.is_superuser,
+                'time': now().isoformat(),
+            }))
 
     def set_room_group_name(self):
         raise NotImplementedError
